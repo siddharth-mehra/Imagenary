@@ -20,8 +20,8 @@ export async function POST(request: NextRequest) {
           }
         ],
         mode: 'payment',
-        success_url: `${process.env.NEXT_BASE_URL}/success`,
-        cancel_url: `${process.env.NEXT_BASE_URL}/cancel`,
+        success_url: `https://imagenary-eight.vercel.app/success`,
+        cancel_url: `https://imagenary-eight.vercel.app/cancel`,
         metadata: {
           imageUrl: imageUrl
         }
