@@ -10,8 +10,7 @@ export async function POST(request: NextRequest) {
     // you can implement some basic check here like, is user valid or not
     const data = await request.json();
     const {imageUrl} = data;
-    const checkoutSession: Stripe.Checkout.Session =
-      await stripe.checkout.sessions.create({
+    const session= await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: [
           {
@@ -26,7 +25,7 @@ export async function POST(request: NextRequest) {
           imageUrl: imageUrl
         }
       });
-    return NextResponse.json({ result: checkoutSession, ok: true });
+    return NextResponse.json({ result: session, ok: true });
   } catch (error) {
     console.log(error);
     return new NextResponse('Internal Server', { status: 500 });
