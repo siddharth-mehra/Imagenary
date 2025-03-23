@@ -2,13 +2,11 @@
 import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
 
-type Props = {
-  imageUrl: string;
-  price: string;
-  
-};
+interface SubscribeComponentProps {
+  imageUrl: string|null;
+}
 
-const SubscribeComponent = ({ imageUrl}: Props) => {
+const SubscribeComponent: React.FC<SubscribeComponentProps> = ({ imageUrl }) => {
   const handleSubmit = async () => {
     const stripe = await loadStripe(
       process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY as string

@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Wand2, Download, Lock } from "lucide-react";
+import { Wand2, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Card } from "@/components/ui/card";
 import { useRouter } from 'next/navigation';
-import SubscribeComponent from "@/app/ui/payment/page";
+import SubscribeComponent from "@/app/ui/payment/Subscription";
 
 export default function Home() {
   const [prompt, setPrompt] = useState("");
@@ -64,35 +64,7 @@ export default function Home() {
     });
   };
 
-  const handleDownload = async () => {
-    try {
-      setDownloading(true);
-      if (image) {
-        const subscriptionDetails = {
-          priceId: 'price_xyz123',
-          price: '₹5',
-          description: 'Image Download'
-        };
-        
-        const queryParams = new URLSearchParams({
-          imageUrl: image,
-          priceId: subscriptionDetails.priceId,
-          price: subscriptionDetails.price,
-          description: subscriptionDetails.description
-        });
-        
-        router.push(`/ui/payment?${queryParams.toString()}`);
-      }
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to navigate to payment page",
-        variant: "destructive",
-      });
-    } finally {
-      setDownloading(false);
-    }
-  };
+
 
   return (
     <main className="container mx-auto px-4 py-8 max-w-4xl">
