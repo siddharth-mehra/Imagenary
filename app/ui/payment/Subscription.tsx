@@ -22,6 +22,8 @@ const SubscribeComponent: React.FC<SubscribeComponentProps> = ({ imageUrl }) => 
       const data = response.data;
       if (!data.ok) throw new Error('Something went wrong');
       
+      sessionStorage.setItem('purchasedImageUrl', imageUrl);
+      
       await stripe.redirectToCheckout({
         sessionId: data.result.id
       });
