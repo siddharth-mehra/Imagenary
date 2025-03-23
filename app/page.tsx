@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Card } from "@/components/ui/card";
+import { useRouter } from 'next/navigation';
+import SubscribeComponent from "@/app/ui/payment/page";
 
 export default function Home() {
   const [prompt, setPrompt] = useState("");
@@ -13,6 +15,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
 
   const generateImage = async () => {
     if (!prompt.trim()) {
@@ -64,25 +67,26 @@ export default function Home() {
   const handleDownload = async () => {
     try {
       setDownloading(true);
-      const response = await fetch("/api/payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ imageUrl: image }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Payment failed");
+      if (image) {
+        const subscriptionDetails = {
+          priceId: 'price_xyz123',
+          price: '₹5',
+          description: 'Image Download'
+        };
+        
+        const queryParams = new URLSearchParams({
+          imageUrl: image,
+          priceId: subscriptionDetails.priceId,
+          price: subscriptionDetails.price,
+          description: subscriptionDetails.description
+        });
+        
+        router.push(`/ui/payment?${queryParams.toString()}`);
       }
-
-      window.location.href = data.paymentUrl;
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message || "Failed to initiate payment",
+        description: error.message || "Failed to navigate to payment page",
         variant: "destructive",
       });
     } finally {
@@ -139,23 +143,9 @@ export default function Home() {
                 draggable="false"
               />
               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <Button
-                  onClick={handleDownload}
-                  disabled={downloading}
-                  className="bg-white text-black hover:bg-white/90"
-                >
-                  {downloading ? (
-                    <span className="flex items-center gap-2">
-                      <Download className="h-4 w-4 animate-bounce" />
-                      Processing...
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-2">
-                      <Download className="h-4 w-4" />
-                      Download (₹5)
-                    </span>
-                  )}
-                </Button>
+                <SubscribeComponent
+                  imageUrl={image}
+                />
               </div>
             </div>
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
